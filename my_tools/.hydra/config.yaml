@@ -1,0 +1,81 @@
+RL:
+  algorithm: RecurrentPPO
+  policy_network: MlpLstmPolicy
+  settings: DEMO
+  save_dir: PPO_TEST
+  save_freq: 50000
+  pretrain_model_path: H:\projects\AcTExplore\Training\Logs\PPO_Contact_AMB_0\model_100000_steps.zip
+  mode: test
+action:
+  action_num: 13
+  trans_step: 0.004
+  rotate_step: 0.2617993877991494
+state:
+  input_type: TTA
+  short_mem_size: 20
+  max_novel_size: 300
+  grid_size: 10
+reward:
+  type: AMB
+  area_regularizer: null
+  no_contact_penalty: -0.2
+  visited_state_penalty: -0.03
+  novelty_threshold: 4
+  no_touch_threshold: 30
+  weight:
+  - 0.1
+  - 1
+  - 1
+termination:
+  horizon_length: 5000
+environment:
+  object:
+    object_name: Banana
+    urdf_path:
+    - objects/ycb/YcbBanana/model.urdf
+  pose:
+    base_position:
+    - 0
+    - 0
+    - 0.1
+    base_orientation:
+    - 0.0
+    - 0.0
+    - 0
+    - 1
+    global_scaling: 1
+tacto:
+  width: 60
+  height: 80
+  visualize_gui: true
+  background: conf/D20816.png
+digit:
+  urdf_path: H:/projects/AcTExplore/misc/meshes/digit.urdf
+  base_orientation:
+  - 0.0
+  - 0.0
+  - 1.0
+  - 6.123233995736766e-17
+pybullet_camera:
+  cameraDistance: 0.2
+  cameraYaw: 25
+  cameraPitch: -30
+  cameraTargetPosition:
+  - 0
+  - 0
+  - 0.12
+visualization:
+  realtime: true
+  render: true
+test:
+  input_pcd: output/visible_from_camera.pcd
+  predict_pcd: output/predict.pcd
+  predict_normals: output/predict_normals.txt
+  voxel_size: 0.005
+  active_iter: 5
+  top_k: 100
+  n_dirs: 16
+  angle_range: 30
+  step_size: 0.01
+  max_depth: 0.1
+  sample_angle: 0.523598

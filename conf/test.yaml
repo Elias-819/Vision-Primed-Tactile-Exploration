@@ -1,0 +1,108 @@
+hydra:
+  run:
+    dir: ./
+
+RL:
+  algorithm: PPO  # RecurrentPPO, PPO
+  policy_network: MlpPolicy    # MlpLstmPolicy, MlpPolicy
+  settings: DEMO
+  save_dir: PPO_TEST
+  save_freq: 50000
+  pretrain_model_path: H:\projects\model_300000_steps.zip
+  mode: test
+
+action:
+  action_num: 13
+  trans_step: 0.004
+  rotate_step: 0.2617993877991494 # np.pi/12
+
+state:
+  input_type: TTA # {TIS(Tactile Image Stacking), TDS(Tactile Difference Stacking), TTS, TTA, depth}
+  short_mem_size: 20
+  max_novel_size: 300
+  grid_size: 10
+
+reward:
+  type: AMB # {TM(touch and movement),AMB (AM + 1/sqrt(Number of visits)), AM(area and movement)}
+  area_regularizer:
+  no_contact_penalty: -0.2
+  visited_state_penalty: -0.03
+  novelty_threshold: 4
+  no_touch_threshold: 30
+  weight: [0.1, 1, 1]  # weight for touching, newly added
+
+termination:
+  horizon_length: 5000
+
+environment:
+  object:
+    object_name: "sphere_small"
+    urdf_path: ["objects/ycb/YcbBanana/model.urdf"]
+    #urdf_path: [ "objects/sphere_small.urdf"] 
+  pose:
+    base_position: [ 0, 0, 0.10 ]
+    base_orientation: [ 0.0, 0.0, 0, 1 ]
+    global_scaling: 1
+
+tacto:
+  width: 60
+  height: 80
+  visualize_gui: True
+  background: conf/D20816.png
+
+digit:
+  urdf_path: "H:/projects/AcTExplore/misc/meshes/digit.urdf"
+  # quaternion from p.getQuaternionFromEuler([0, 0, pi])
+  base_orientation: [ 0.0, 0.0, 1.0, 6.123233995736766e-17 ]
+
+pybullet_camera:
+  cameraDistance: 0.2
+  cameraYaw: 25
+  cameraPitch: -30
+  cameraTargetPosition: [ 0, 0, 0.12 ]
+
+### Drill
+#pybullet_camera:
+#  cameraDistance: 0.22
+#  cameraYaw: 25
+#  cameraPitch: -30
+#  cameraTargetPosition: [ 0, 0, 0.2 ]
+#
+
+### Banana
+#pybullet_camera:
+#  cameraDistance: 0.23
+#  cameraYaw: 25
+#  cameraPitch: -40
+#  cameraTargetPosition: [ 0, 0, 0.07 ]
+
+visualization:
+  realtime: True
+  render: True
+
+# test:
+#   input_pcd: "output/visible_from_camera.pcd"
+#   active_iter: 5
+#   num_interp: 10
+#   step_size: 0.005
+#   knn_normals: 30
+#   max_depth: 0.5
+
+tdn:
+  using_tdn: false
+  use_mask: false
+  real: false
+  tdn_weights: tdn_weights_240.pth.tar
+  render:
+    pixmm: 0.03
+    width: 240
+    height: 320
+    cam_dist: 0.022
+    shear_mag: 5.0
+    pen:
+      min: 0.0005
+      max: 0.002
+
+eval:
+  deterministic: false       # 用确定性策略（可复现）。想看多样性可设 false
+  log_every_seconds: 2      # 0 表示“每步记录一次”；>0 表示每 N 秒记录一次
