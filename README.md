@@ -40,6 +40,7 @@ pip install -r requirements.txt
 ```
 
 ## my_tools introduction
+
 ### cam_view_scale.py:
 The cam_view_scale.py file simulates the camera view for point cloud data. It applies the concept of camera intrinsic and extrinsic parameters to project 3D points onto a 2D image plane. The script filters out points based on the camera's field of view (FOV) and region of interest (ROI), and performs depth buffering to select the closest point for each pixel. It is designed to simulate the process of a robot or camera system observing an object, extracting visible points, and saving the filtered data to a new point cloud file.
 Key Functions
