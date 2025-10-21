@@ -70,7 +70,7 @@ The pcd_to_npy.py script is designed to convert a PCD (Point Cloud Data) file in
 ### predict_Multi_projection.py:
 The predict_Multi_projection.py file performs multi-view edge extrapolation and point cloud densification for improving the resolution and prediction of next touch points in the exploration process. This script is designed to generate predicted touch points for object exploration by considering multiple projections, estimating surface normals, and applying geometric extrapolation techniques.
 
-## Key Features
+#### Key Features
 1.**Point Cloud Densification**:
 The script uses a K-Nearest Neighbor (KNN) approach for local linear interpolation to densify the point cloud.
 Additional points are inserted between neighboring points based on the KNN distance, improving the resolution and density of the point cloud.
@@ -92,7 +92,7 @@ Surface normals of the predicted points are saved to a .txt file.
 ### test_sliding.py:
 The tset_sliding_first_edition.py script is designed to drive the tactile sensor movements in a robotic environment using multi-point predictions based on vision-guided exploration. The script integrates force control, reinforcement learning, and point cloud prediction to perform tactile exploration. It simulates the robot's interaction with an object, adjusting its movements to collect relevant data points for 3D object reconstruction.
 
-## Key Features
+#### Key Features
 1.**Force Control with Pressure Feedback**:
 The script uses a simple feedback loop to adjust the robot's movements based on force readings from the tactile sensor.
 A force target is defined, and small adjustments are made to the depth of the sensor based on the difference between the measured force and the target force.
