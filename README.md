@@ -37,9 +37,77 @@ To get started with this project, clone the repository and install the necessary
 git clone https://github.com/Elias-819/Vision-Primed-Tactile-Exploration.git
 cd Vision-Primed-Tactile-Exploration
 pip install -r requirements.txt
+```
 
----
+## my_tools introduction
+### cam_view_scale.py:
+The cam_view_scale.py file simulates the camera view for point cloud data. It applies the concept of camera intrinsic and extrinsic parameters to project 3D points onto a 2D image plane. The script filters out points based on the camera's field of view (FOV) and region of interest (ROI), and performs depth buffering to select the closest point for each pixel. It is designed to simulate the process of a robot or camera system observing an object, extracting visible points, and saving the filtered data to a new point cloud file.
+Key Functions
 
-### my_tools introduction
+1.**load_xyz(path)**:
+Loads point cloud data from a .txt file at the specified path.
+Returns the points as a numpy array.
 
+2.**save_pcd(pts, path)**:
+Saves the given point cloud data (pts) to a .pcd file at the specified path.
+The .pcd file format includes headers for point cloud data like size, type, and point count.
 
+3.**simulate_camera_view(points, R, t, width, height, fx, fy, cx, cy, roi_px=None, roi_rel=None)**:
+Simulates the camera view by projecting 3D points onto a 2D plane based on the given camera parameters (rotation R, translation t, focal lengths fx, fy, and center cx, cy).
+It includes the option to apply a region of interest (ROI) to filter out points outside a specific area in the camera image. You can define the ROI either by pixel coordinates (roi_px) or relative proportions (roi_rel).
+The function applies depth buffering to retain only the closest point for each pixel.
+Returns the indices of the visible points after filtering.
+
+4.**Main Execution**:
+Loads the point cloud data from a .pcd file using load_xyz.
+Defines the camera parameters, including position and orientation.
+Simulates the camera view and filters the visible points using the simulate_camera_view function.
+Displays the visible points in 3D and saves them to a new .pcd file.
+
+### pcd_to_npy.py:
+The pcd_to_npy.py script is designed to convert a PCD (Point Cloud Data) file into a NumPy array format. Point cloud data, often used in 3D vision tasks, is typically stored in .pcd files. This script reads the .pcd file, extracts the point cloud, converts it into a NumPy array, and saves the result in .npy format. This conversion is useful for processing and manipulating point cloud data in a more flexible format, especially for machine learning or other computational tasks.
+
+### predict_Multi_projection.py:
+The predict_Multi_projection.py file performs multi-view edge extrapolation and point cloud densification for improving the resolution and prediction of next touch points in the exploration process. This script is designed to generate predicted touch points for object exploration by considering multiple projections, estimating surface normals, and applying geometric extrapolation techniques.
+
+## Key Features
+1.**Point Cloud Densification**:
+The script uses a K-Nearest Neighbor (KNN) approach for local linear interpolation to densify the point cloud.
+Additional points are inserted between neighboring points based on the KNN distance, improving the resolution and density of the point cloud.
+The densification process is configurable with parameters such as the number of interpolation points (num_interp), the maximum distance for neighbors (max_dist), and the number of nearest neighbors (knn).
+
+2.**Multi-Projection Edge Extrapolation**:
+The script applies multi-view extrapolation using convex hull projections of the point cloud to predict future touch points.
+The edge points of the point cloud are identified, and for each boundary point, the script generates a predicted point by extrapolating along the surface normal direction.
+The surface normals are estimated using multi-scale nearest neighbor methods to improve robustness.
+
+3.**Visualization**:
+The script generates visualizations of the original points, newly added dense points, boundary points, predicted points, and normals.
+The predicted points and their directions are visualized with arrows to illustrate the extrapolated paths.
+
+4.**Prediction Output**:
+The resulting predicted points are saved to a .pcd file.
+Surface normals of the predicted points are saved to a .txt file.
+
+### test_sliding.py:
+The tset_sliding_first_edition.py script is designed to drive the tactile sensor movements in a robotic environment using multi-point predictions based on vision-guided exploration. The script integrates force control, reinforcement learning, and point cloud prediction to perform tactile exploration. It simulates the robot's interaction with an object, adjusting its movements to collect relevant data points for 3D object reconstruction.
+
+## Key Features
+1.**Force Control with Pressure Feedback**:
+The script uses a simple feedback loop to adjust the robot's movements based on force readings from the tactile sensor.
+A force target is defined, and small adjustments are made to the depth of the sensor based on the difference between the measured force and the target force.
+
+2.**Multi-Point Prediction**:
+The script utilizes the multi_projection function from predict_Multi_projection.py to predict the next set of touch points. These predictions guide the robot's exploration path, determining where and how to move next.
+
+3.**Path Planning and Sliding**:
+The script defines a sequence of points for the robot to move through, based on the predicted touch points. The robot slides between these points, adjusting its depth and orientation based on force feedback.
+
+4.**Environment Simulation with PyBullet**:
+The environment is simulated using PyBullet, where the robot’s movements are executed. The tactile sensor's feedback is also recorded through this simulation, allowing for real-time adjustments and exploration.
+
+5.**Logger for Tracking Progress**:
+The script logs the robot's progress, including coverage, path length, and sensor feedback, saving the results to a CSV file for later analysis.
+
+6.**Visualizations**:
+The script optionally visualizes the exploration path in real-time using PyBullet’s visualization tools and matplotlib. It can visualize the sensor's path and depth map, helping to analyze the exploration process.
